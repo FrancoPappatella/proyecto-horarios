@@ -7,10 +7,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
-@Component
+@Component("horario")
 public class HorarioInterceptor implements HandlerInterceptor {
 	@Value("${config.horario.apertura}")
 	private Integer apertura;
@@ -34,6 +35,7 @@ public class HorarioInterceptor implements HandlerInterceptor {
 			request.setAttribute("mensaje", mensaje.toString());
 			return true;
 		}
+		response.sendRedirect(request.getContextPath().concat("/cerrado"));
 		return false;
 	}
 
@@ -41,7 +43,7 @@ public class HorarioInterceptor implements HandlerInterceptor {
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
 			ModelAndView modelAndView) throws Exception {
 		String mensaje = request.getAttribute("mensaje").toString();
-		modelAndView.addObject("horario",mensaje);
+		modelAndView.addObject("horario", mensaje);
 		HandlerInterceptor.super.postHandle(request, response, handler, modelAndView);
 	}
 
